@@ -1,0 +1,96 @@
+[gd_scene load_steps=9 format=3 uid="uid://cdn82e30r2i5u"]
+
+[ext_resource type="Script" path="res://towerOS.gd" id="1_u4pg6"]
+[ext_resource type="Texture2D" uid="uid://cpqy3md3bdyvl" path="res://animace_vzdusna_vez.png" id="2_6nrcp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g3h1i"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_det88"]
+size = Vector2(4.88484, 4.88484)
+
+[sub_resource type="Animation" id="Animation_yb2gc"]
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 3]
+}
+
+[sub_resource type="Animation" id="Animation_ts7vh"]
+resource_name = "walk_cykle"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Icon:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lpf8o"]
+_data = {
+"RESET": SubResource("Animation_yb2gc"),
+"walk_cykle": SubResource("Animation_ts7vh")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qk3wu"]
+
+[node name="Tower" type="CharacterBody2D"]
+script = ExtResource("1_u4pg6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_g3h1i")
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0.5, 0.5)
+scale = Vector2(2.66129, 2.66129)
+shape = SubResource("RectangleShape2D_det88")
+debug_color = Color(0.62921, 0.481649, 0.599618, 0.42)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lpf8o")
+}
+
+[node name="Icon" type="Sprite2D" parent="."]
+scale = Vector2(0.922, 0.922)
+texture = ExtResource("2_6nrcp")
+hframes = 4
+
+[node name="areaPEW" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="areaPEW"]
+scale = Vector2(3.14651, 3.14651)
+shape = SubResource("CircleShape2D_qk3wu")
+debug_color = Color(0, 0.6, 0.701961, 0.0431373)
+
+[connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="areaPEW" to="." method="_on_area_pew_body_entered"]
+[connection signal="body_exited" from="areaPEW" to="." method="_on_area_pew_body_exited"]

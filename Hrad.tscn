@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://d3a1kott2v20e"]
+
+[ext_resource type="Texture2D" uid="uid://cu7t1cwrghhbo" path="res://hrad.png" id="1_65gil"]
+[ext_resource type="Script" path="res://hrad.gd" id="2_nwi30"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fnakv"]
+size = Vector2(30, 39)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_opr3n"]
+radius = 19.0263
+
+[node name="Hrad" type="StaticBody2D"]
+script = ExtResource("2_nwi30")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_fnakv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_65gil")
+hframes = 6
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 16)
+shape = SubResource("CircleShape2D_opr3n")
+debug_color = Color(0.923345, 0.0743535, 0.651118, 0.42)
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

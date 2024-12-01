@@ -1,0 +1,225 @@
+[gd_scene load_steps=17 format=3 uid="uid://dy5hdkdc8m877"]
+
+[ext_resource type="Script" path="res://tower.gd" id="1_madk2"]
+[ext_resource type="Texture2D" uid="uid://kry15jkebopq" path="res://animace_kamenna_vez.png" id="2_nevhl"]
+[ext_resource type="Texture2D" uid="uid://8frb55l5ot60" path="res://veze/kamena.png" id="3_yxbmy"]
+[ext_resource type="Texture2D" uid="uid://bljoe0kh5vn3y" path="res://textura efekty/fire.png" id="4_ybf7u"]
+[ext_resource type="Texture2D" uid="uid://ryn6ok0krm3l" path="res://waterJet.png" id="5_m8uxv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g3h1i"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_det88"]
+size = Vector2(16.5, 16.5)
+
+[sub_resource type="Animation" id="Animation_yb2gc"]
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Walk:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 3]
+}
+
+[sub_resource type="Animation" id="Animation_ts7vh"]
+resource_name = "walk_cykle"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Walk:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lpf8o"]
+_data = {
+"RESET": SubResource("Animation_yb2gc"),
+"walk_cykle": SubResource("Animation_ts7vh")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nk106"]
+radius = 12.3947
+
+[sub_resource type="Animation" id="Animation_53wfn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("fire/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("water/Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_ag8da"]
+resource_name = "fire"
+length = 0.7
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("fire/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.466667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("water/Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ptvvy"]
+_data = {
+"RESET": SubResource("Animation_53wfn"),
+"fire": SubResource("Animation_ag8da")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kr4mi"]
+radius = 14.0
+height = 38.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r60do"]
+size = Vector2(4, 39)
+
+[node name="Tower" type="CharacterBody2D" groups=["tower"]]
+script = ExtResource("1_madk2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_g3h1i")
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_det88")
+debug_color = Color(0.62921, 0.481649, 0.599618, 0.42)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lpf8o")
+}
+
+[node name="Walk" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.922, 0.922)
+texture = ExtResource("2_nevhl")
+hframes = 4
+
+[node name="Normal" type="Sprite2D" parent="."]
+position = Vector2(-9.53674e-07, -9.53674e-07)
+texture = ExtResource("3_yxbmy")
+
+[node name="HealthBar" type="ColorRect" parent="."]
+visible = false
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = -6.0
+color = Color(1, 0, 0, 0.505882)
+
+[node name="areaPEW" type="Area2D" parent="."]
+collision_layer = 3
+collision_mask = 3
+
+[node name="target_area" type="CollisionShape2D" parent="areaPEW"]
+scale = Vector2(3.14651, 3.14651)
+shape = SubResource("CircleShape2D_nk106")
+debug_color = Color(0, 0.6, 0.701961, 0.0431373)
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ptvvy")
+}
+
+[node name="fire" type="Node2D" parent="."]
+visible = false
+rotation = 1.5708
+
+[node name="Sprite2D" type="Sprite2D" parent="fire"]
+modulate = Color(1, 1, 1, 0.54902)
+texture = ExtResource("4_ybf7u")
+offset = Vector2(-2.19, -25)
+hframes = 3
+frame = 2
+
+[node name="fire" type="Area2D" parent="fire"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="fire/fire"]
+position = Vector2(-8.30516e-07, -19)
+shape = SubResource("CapsuleShape2D_kr4mi")
+
+[node name="water" type="Node2D" parent="."]
+visible = false
+rotation = 1.5708
+
+[node name="Sprite2D" type="Sprite2D" parent="water"]
+modulate = Color(1, 1, 1, 0.54902)
+texture = ExtResource("5_m8uxv")
+offset = Vector2(0, -25)
+hframes = 4
+
+[node name="fire" type="Area2D" parent="water"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="water/fire"]
+position = Vector2(-1.00007, -19.5)
+shape = SubResource("RectangleShape2D_r60do")
+
+[connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="body_entered" from="areaPEW" to="." method="_on_area_pew_body_entered"]
+[connection signal="body_exited" from="areaPEW" to="." method="_on_area_pew_body_exited"]
+[connection signal="body_entered" from="fire/fire" to="." method="_on_fire_body_entered"]
+[connection signal="body_entered" from="water/fire" to="." method="_on_fire_body_entered"]

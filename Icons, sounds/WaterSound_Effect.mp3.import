@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cc7fvudbgibv7"
+path="res://.godot/imported/WaterSound_Effect.mp3-28b82434a2ac8e83b36496811e1dceb4.mp3str"
+
+[deps]
+
+source_file="res://Icons, sounds/WaterSound_Effect.mp3"
+dest_files=["res://.godot/imported/WaterSound_Effect.mp3-28b82434a2ac8e83b36496811e1dceb4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4
