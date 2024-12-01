@@ -18,12 +18,14 @@ func _ready() -> void:
 	$AnimationPlayer.play("walk_cykle")
 	$AnimationPlayer2.play("fire")
 	self_type = Global.selected_type
+	$ShootTimer.wait_time = Global.fire_speed[self_type]
 	if self_type == 0:
 		$Walk.texture = load("res://animace_kamenna_vez.png")
 		$Normal.texture = load("res://veze/kamena.png")
 	if self_type == 1:
 		$Walk.texture = load("res://animace_vzdusna_vez.png")
 		$Normal.texture = load("res://veze/vzdušna vež.png")
+		$areaPEW/target_area.shape.radius = 30
 	if self_type == 2:
 		$Walk.texture = load("res://animace_voda_vez.png")
 		$Normal.texture = load("res://veze/vodní vež.png")
@@ -53,10 +55,12 @@ func _process(delta: float) -> void:
 			#delete tower by player
 			queue_free()
 	
-	if (self_type == 3 or self_type == 2) and canAim.size() != 0:
-		var ang = self.global_position.angle_to( canAim[0].global_position)
-		$fire.rotate(ang) 
-		$water.rotate(ang) 
+	#if canAim.size() != 0 and self_type == 3:
+		#$fire.visible = true
+	#if canAim.size() != 0 and self_type == 2:
+		#$wa.visible = true
+	
+	
 	
 	if hp < 1:
 		queue_free()
@@ -113,6 +117,11 @@ func _on_shoot_timer_timeout() -> void:
 			new_kule.velocity = 150 * dir.normalized()
 			get_parent().add_child(new_kule)
 			
+	if (self_type == 3 or self_type == 2) and canAim.size() != 0:
+		#var ang = self.global_position.angle_to( canAim[0].global_position)
+		var ang = (canAim[0].global_position - self.global_position).normalized().angle()
+		$fire.rotate(ang) 
+		$water.rotate(ang) 
 
 
 func _on_fire_body_entered(body: Node2D) -> void:

@@ -18,7 +18,6 @@ func _process(delta: float) -> void:
 		clear_tile()
 	
 	$Timer.wait_time = float($Dificulty.time_left / 120) + 0.2
-	print("dif",Global.dificulty, "w",$Timer.wait_time)
 	
 	$Control/HP.text = str(Global.health)
 	$Control/COINS.text = str(Global.coins)
